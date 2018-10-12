@@ -12,5 +12,19 @@ describe 'Creating Projets', type: :feature do
     click_button 'Create Project'
 
     expect(page).to have_content('Project has been created.')
+    title = "TextMate 2 - Projects - Ticketee"
+    expect(page).to have_title(title)
+  end
+end
+
+describe 'Show project', type: :feature do
+  scenario 'title is properly set', js: true do
+    project = create :project, name: 'TextMate 2', description: 'A text-editor for OS X'
+
+    visit project_path(project)
+
+    expect(page.current_path).to eq(project_path(project))
+    title = "TextMate 2 - Projects - Ticketee"
+    expect(page).to have_title(title)
   end
 end

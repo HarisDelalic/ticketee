@@ -2,18 +2,26 @@ require 'rails_helper'
 
 describe 'Creating Projets', type: :feature do
 
-  scenario 'can create a project', js: true do
+  before(:each) do
     visit root_path
-
     click_link 'New Project'
+  end
 
-    fill_in 'Name', with: 'TextMate 2'
-    fill_in 'Description', with: 'A text-editor for OS X'
+  scenario 'can create a project', js: true do
+    fill_in 'project_name', with: 'TextMate 2'
+    fill_in 'project_description', with: 'A text-editor for OS X'
     click_button 'Create Project'
 
     expect(page).to have_content('Project has been created.')
     title = "TextMate 2 - Projects - Ticketee"
     expect(page).to have_title(title)
+  end
+
+  scenario 'can not create project without a name', js: true do
+    fill_in 'project_description', with: 'A text-editor for OS X'
+    click_button 'Create Project'
+
+    expect(page).to have_content("You have to fill in name attribute!")
   end
 end
 

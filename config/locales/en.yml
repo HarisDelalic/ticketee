@@ -30,4 +30,13 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello world"
+  errors:
+    format: "%{message}"
+
+  activerecord:
+    errors:
+      models:
+        project:
+          attributes:
+            name:
+              blank: "You have to fill in name attribute!"

@@ -1,4 +1,6 @@
-<%= link_to "New Project", new_project_path %>
+<%= link_to "New Project", new_project_path %><br />
+
+<%= notice %><br />
 
 <% @projects.each do |project| %>
   <div id= <%= dom_id(project)%> >
@@ -6,5 +8,6 @@
   <%= project.description %>
   <%= link_to "Show project", project %>
   <%= link_to "Edit project", edit_project_path(project) %>
+  <%= link_to "Delete project", project_path(project), method: :delete %>
   </div>
 <% end %>

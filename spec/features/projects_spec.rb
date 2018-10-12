@@ -1,5 +1,11 @@
 require 'rails_helper'
 
+SHOW_PROJECT = 'Show project'.freeze
+CREATE_PROJECT = 'Create Project'.freeze
+UPDATE_PROJECT = 'Update Project'.freeze
+EDIT_PROJECT = 'Edit project'.freeze
+DELETE_PROJECT = 'Delete project'.freeze
+
 describe 'Create', type: :feature do
 
   before(:each) do
@@ -10,7 +16,7 @@ describe 'Create', type: :feature do
   scenario 'can create a project', js: true do
     fill_in 'project_name', with: 'TextMate 2'
     fill_in 'project_description', with: 'A text-editor for OS X'
-    click_button 'Create Project'
+    click_button CREATE_PROJECT
 
     expect(page).to have_content('Project has been created.')
     title = "TextMate 2 - Projects - Ticketee"
@@ -19,7 +25,7 @@ describe 'Create', type: :feature do
 
   scenario 'can not create project without a name', js: true do
     fill_in 'project_description', with: 'A text-editor for OS X'
-    click_button 'Create Project'
+    click_button CREATE_PROJECT
 
     expect(page).to have_content("You have to fill in name attribute!")
   end
@@ -52,9 +58,9 @@ describe 'Index and Show', type: :feature do
 
     visit projects_path
 
-    expect(page).to have_content("Show project")
+    expect(page).to have_content(SHOW_PROJECT)
 
-    click_link "Show project"
+    click_link SHOW_PROJECT
 
     expect(page.current_path).to eq(project_path(project))
     expect(page).to have_title("project name - Projects - Ticketee")
@@ -65,7 +71,7 @@ describe 'Index and Show', type: :feature do
 
     before(:each) do
       visit projects_path
-      click_link "Edit project"
+      click_link EDIT_PROJECT
     end
     scenario "User successfully updates project" do
       expect(page.current_path).to eq(edit_project_path(project))
@@ -82,8 +88,31 @@ describe 'Index and Show', type: :feature do
 
       fill_in "project_name", with: ''
 
-      click_button "Update Project"
+      click_button UPDATE_PROJECT
       expect(page).to have_content("You have to fill in name attribute!")
+    end
+  end
+
+  describe 'Delete project', type: :feature do
+    let!(:project) { create :project, name: 'project name' }
+
+    scenario 'User delete project from index page' do
+      visit projects_path
+      click_link DELETE_PROJECT
+
+      expect(page).to have_content('Project has been deleted.')
+
+      expect(page).to_not have_content('project name')
+    end
+
+    scenario 'User delete project from show page' do
+      visit projects_path
+      click_link SHOW_PROJECT
+      click_link DELETE_PROJECT
+
+      expect(page).to have_content('Project has been deleted.')
+
+      expect(page).to_not have_content('project name')
     end
   end
 end

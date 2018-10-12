@@ -48,7 +48,7 @@ describe 'Index and Show', type: :feature do
   end
 
   scenario 'User view created project', js: true do
-    first_project = create :project, name: 'first project name', description: 'first project description'
+    project = create :project, name: 'project name', description: 'project description'
 
     visit projects_path
 
@@ -56,7 +56,34 @@ describe 'Index and Show', type: :feature do
 
     click_link "Show project"
 
-    expect(page.current_path).to eq(project_path(first_project))
-    expect(page).to have_title("first project name - Projects - Ticketee")
+    expect(page.current_path).to eq(project_path(project))
+    expect(page).to have_title("project name - Projects - Ticketee")
+  end
+
+  describe "Edit project", type: :feature do
+    let!(:project) { create :project, name: 'project name', description: 'project description' }
+
+    before(:each) do
+      visit projects_path
+      click_link "Edit project"
+    end
+    scenario "User successfully updates project" do
+      expect(page.current_path).to eq(edit_project_path(project))
+
+      fill_in "project_name", with: 'project name updated'
+
+      click_button "Update Project"
+      expect(page.current_path).to eq(project_path(project))
+      expect(page).to have_content("project name updated")
+    end
+
+    scenario "User can\'t update project with blank name", js: true do
+      expect(page.current_path).to eq(edit_project_path(project))
+
+      fill_in "project_name", with: ''
+
+      click_button "Update Project"
+      expect(page).to have_content("You have to fill in name attribute!")
+    end
   end
 end

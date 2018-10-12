@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe 'Creating Projets', type: :feature do
+describe 'Create', type: :feature do
 
   before(:each) do
     visit root_path
@@ -25,7 +25,18 @@ describe 'Creating Projets', type: :feature do
   end
 end
 
-describe 'Show project', type: :feature do
+describe 'Index and Show', type: :feature do
+  scenario 'list all projects', js: true do
+    first_project = create :project, name: 'first project name', description: 'first project description'
+    second_project = create :project, name: 'second project name', description: 'second project description'
+    visit projects_path
+
+    expect(page).to have_content(first_project.name)
+    expect(page).to have_content(first_project.description)
+    expect(page).to have_content(second_project.name)
+    expect(page).to have_content(second_project.description)
+  end
+
   scenario 'title is properly set', js: true do
     project = create :project, name: 'TextMate 2', description: 'A text-editor for OS X'
 
@@ -34,5 +45,18 @@ describe 'Show project', type: :feature do
     expect(page.current_path).to eq(project_path(project))
     title = "TextMate 2 - Projects - Ticketee"
     expect(page).to have_title(title)
+  end
+
+  scenario 'User view created project', js: true do
+    first_project = create :project, name: 'first project name', description: 'first project description'
+
+    visit projects_path
+
+    expect(page).to have_content("Show project")
+
+    click_link "Show project"
+
+    expect(page.current_path).to eq(project_path(first_project))
+    expect(page).to have_title("first project name - Projects - Ticketee")
   end
 end

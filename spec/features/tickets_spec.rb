@@ -33,3 +33,25 @@ RSpec.describe 'create', type: :feature do
     expect(page.current_path).to eq(project_tickets_path(project))
   end
 end
+
+feature 'view', type: :feature  do
+
+  scenario "Viewing tickets for a given project", js: true do
+    first_project = create(:project, name: 'TextMate 2', description: 'desc')
+    frist_project_ticket = create(:ticket, project: first_project, name: "Make it shiny!", description: "Gradients! Starbursts! Oh my!")
+    second_project = create(:project, name: 'Internet Explorer')
+    second_project_ticket = create(:ticket, project: second_project, name: "Standards compliance", description: "Isn't a joke.")
+
+    visit projects_path
+
+    click_link "Show project TextMate 2"
+    expect(page).to have_content("Make it shiny!")
+    expect(page).to_not have_content("Standards compliance")
+
+    click_link "Make it shiny!"
+    within("#ticket h2") do
+      expect(page).to have_content("Make it shiny!")
+    end
+    expect(page).to have_content("Gradients! Starbursts! Oh my!")
+  end
+end

@@ -6,9 +6,10 @@
   <div id= <%= dom_id(project)%> >
   <%= project.name %>
   <%= project.description %>
-  <%= link_to "Show project", project %>
-  <%= link_to "Edit project", edit_project_path(project) %>
+  <%= link_to "Show project #{project.name}", project %><br/>
+  <%= link_to "Edit project", edit_project_path(project) %><br/>
   <%= link_to "Delete project", project_path(project), method: :delete,
-              data: {confirm: "Are you sure you want to delete this project?"} %>
+              data: {confirm: "Are you sure you want to delete this project?"} %><br/>
   </div>
+  <br/><br/>
 <% end %>

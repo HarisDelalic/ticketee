@@ -1,5 +1,7 @@
 class TicketsController < ApplicationController
   before_action :set_project
+  before_action :set_ticket, only: [:show]
+
   def index
 
   end
@@ -19,6 +21,10 @@ class TicketsController < ApplicationController
     end
   end
 
+  def show
+    
+  end
+
   private
   def ticket_params
     params.require(:ticket).permit(:name, :description)
@@ -26,5 +32,9 @@ class TicketsController < ApplicationController
 
   def set_project
     @project = Project.find(params[:project_id])
+  end
+
+  def set_ticket
+    @ticket = @project.tickets.find(params[:id])
   end
 end
